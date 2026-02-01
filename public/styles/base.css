@@ -1,0 +1,84 @@
+/* src/styles/base.css */
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --card-bg: #000;
+  --zx-red: #ff0000; --zx-yellow: #ffff00; --zx-green: #00ff00; --zx-cyan: #00ffff; --zx-blue: #0000ff; --zx-magenta: #ff00ff;
+}
+
+body {
+  margin: 0;
+  background-color: #111; /* Fondo exterior */
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--fg);
+  display: flex;
+  justify-content: center;
+}
+
+.wrap { width: 100%; max-width: 900px; padding: 20px; }
+
+.crt {
+  background: var(--bg);
+  padding: 40px;
+  border: 4px solid #222;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Títulos con el estilo cyan de Spectrum */
+h1 { color: var(--zx-cyan); text-transform: uppercase; font-size: 2.5rem; margin: 0; }
+h2 { color: var(--zx-yellow); border-bottom: 2px solid var(--zx-cyan); padding-bottom: 10px; text-transform: uppercase; }
+
+.actions { display: flex; gap: 15px; margin: 20px 0; }
+
+/* Botones estilo Spectrum */
+.btn {
+  padding: 8px 16px;
+  border: 2px solid var(--zx-cyan);
+  background: transparent;
+  color: var(--zx-cyan);
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn.yellow { border-color: var(--zx-yellow); color: var(--zx-yellow); }
+
+.card .title { font-size: 1.2rem; margin-bottom: 10px; font-weight: bold; }
+
+/* src/styles/base.css */
+
+/* Contenedor Grid */
+.grid { 
+  display: grid; 
+  /* Por defecto: 2 columnas iguales */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px; 
+  width: 100%;
+}
+
+/* --- MODO RESPONSIVE --- */
+@media (max-width: 768px) {
+  .grid {
+    /* En pantallas pequeñas: 1 sola columna */
+    grid-template-columns: 1fr;
+    gap: 15px; /* Reducimos un poco el espacio */
+  }
+
+  .wrap {
+    padding: 20px 10px; /* Menos margen lateral en móvil */
+  }
+
+  .crt {
+    padding: 20px; /* Compactamos el contenedor principal */
+  }
+
+  .actions {
+    flex-direction: column; /* Botones de arriba uno sobre otro en móvil */
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%; /* Botones a ancho completo para que sean fáciles de pulsar */
+  }
+}

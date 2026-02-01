@@ -1,0 +1,19 @@
+---
+interface Props {
+  games: { title: string; desc: string; url: string }[];
+}
+const { games } = Astro.props;
+const borderColors = ["b-cyan", "b-magenta"]; // Colores para destacados
+---
+<div class="section">
+  <h2>Juegos</h2>
+  <div class="grid">
+    {games.map((g, i) => (
+      <article class={`card ${borderColors[i % borderColors.length]}`}>
+        <h3 class="title">{g.title}</h3>
+        <p>{g.desc}</p>
+        <a class="btn" href={g.url} target="_blank" rel="noreferrer">Play →</a>
+      </article>
+    ))}
+  </div>
+</div>

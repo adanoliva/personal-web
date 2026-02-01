@@ -1,0 +1,23 @@
+---
+interface Props {
+  games: { title: string; desc: string; url: string }[];
+}
+const { games } = Astro.props;
+// Colores clásicos de Spectrum para el retro corner
+const borderColors = ["b-yellow", "b-green", "b-blue", "b-red"];
+---
+<div class="section" style="margin-top: 40px;">
+  <h2 style="border-bottom: 2px dashed #444;">Retro corner</h2>
+  <div class="grid">
+    {games.map((g, i) => (
+      <article class={`card ${borderColors[i % borderColors.length]}`}>
+        <h3 class="title">{g.title}</h3>
+        <p>{g.desc}</p>
+        <a class="btn" href={g.url} target="_blank" rel="noreferrer">Play →</a>
+      </article>
+    ))}
+  </div>
+  <p class="mini" style="margin-top: 20px; opacity: 0.7;">
+    LOAD "" · 128K vibes · algún día llegará un proyecto para NES.
+  </p>
+</div>

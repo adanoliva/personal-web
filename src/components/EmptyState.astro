@@ -1,0 +1,30 @@
+---
+interface Props {
+  message?: string;
+}
+const { message = "No se han encontrado juegos disponibles." } = Astro.props;
+---
+<div class="empty-state">
+  <div class="error-border">
+    <p class="error-title">** [ SYSTEM ERROR ] **</p>
+    <p>{message}</p>
+    <a href="https://adanoliva.itch.io" class="btn yellow">Ir a Itch.io manualmente</a>
+  </div>
+</div>
+
+<style>
+  .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .error-border {
+    border: 2px dashed var(--zx-red, #ff0000);
+    padding: 20px;
+    display: inline-block;
+  }
+  .error-title {
+    color: var(--zx-red, #ff0000);
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+</style>

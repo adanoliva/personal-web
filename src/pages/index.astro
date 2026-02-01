@@ -1,0 +1,116 @@
+---
+import FeaturedGames from '../components/FeaturedGames.astro';
+import RetroCorner from '../components/RetroCorner.astro';
+import EmptyState from '../components/EmptyState.astro';
+
+interface Game {
+  title: string;
+  desc: string;
+  url: string;
+  isRetro: boolean;
+}
+
+const ITCH_API_KEY = import.meta.env.ITCH_API_KEY;
+const ITCH_URL = "https://itch.io/api/1/key/my-games";
+
+let allGames: Game[] = [];
+let hasError = false;
+
+try {
+  const response = await fetch(ITCH_URL, {
+    headers: { 'Authorization': `Bearer ${ITCH_API_KEY}` }
+  });
+  
+  if (!response.ok) throw new Error("API Connection failed");
+  
+  const data = await response.json();
+  
+  if (data.games) {
+    allGames = data.games
+      .filter((game: any) => 
+        game.classification === 'game' && 
+        game.published === true 
+      )
+      .map((game: any): Game => {
+        const searchContent = `${game.title} ${game.short_text}`.toLowerCase();
+        const isRetro = searchContent.includes('zx') || 
+                        searchContent.includes('spectrum') || 
+                        searchContent.includes('nes');
+
+        return {
+          title: game.title,
+          desc: game.short_text || "Aventura retro",
+          url: game.url,
+          isRetro: isRetro,
+        };
+      });
+  }
+} catch (error) {
+  console.error("Error cargando juegos:", error);
+  hasError = true;
+}
+
+const featured = allGames.filter(g => !g.isRetro);
+const retro = allGames.filter(g => g.isRetro);
+const isEmpty = !hasError && allGames.length === 0;
+---
+
+<html lang="es" data-theme="zx">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adán Oliva — Indie & Retro</title>
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" id="theme-style" href="/styles/themes/zx.css" />
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme") || "zx";
+      document.documentElement.dataset.theme = savedTheme;
+      const themeLink = document.getElementById("theme-style");
+      if (themeLink) themeLink.href = `/styles/themes/${savedTheme}.css`;
+    </script>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="crt">
+        <h1>Adán Oliva</h1>
+        <p class="subtitle">
+          Tech Lead Frontend (React). Indie game dev en mi tiempo libre.<br />
+          Entusiasta retro: ZX Spectrum hoy — NES algún día.
+        </p>
+
+        <div class="actions">
+          <a class="btn cyan" href="https://adanoliva.itch.io" target="_blank" rel="noreferrer">▶ Itch.io</a>
+          <a class="btn yellow" href="https://linkedin.com" target="_blank" rel="noreferrer">⬡ LinkedIn</a>
+          <button class="btn" id="theme-toggle">Cambiar Theme</button>
+        </div>
+
+        {hasError && <EmptyState message="Error al conectar con Itch.io. Los sistemas están offline." />}
+        
+        {isEmpty && <EmptyState message="No hay juegos públicos disponibles en este momento." />}
+
+        {!hasError && !isEmpty && (
+          <>
+            {featured.length > 0 && <FeaturedGames games={featured} />}
+            {retro.length > 0 && <RetroCorner games={retro} />}
+          </>
+        )}
+
+        <footer>
+          Generado con Astro y desplegado usando CI/CD en Cloudflare Pages.
+        </footer>
+      </section>
+    </main>
+
+    <script>
+      function switchTheme() {
+        const themeLink = document.getElementById("theme-style") as HTMLLinkElement;
+        const currentTheme = document.documentElement.dataset.theme;
+        const newTheme = currentTheme === "zx" ? "nes" : "zx";
+        document.documentElement.dataset.theme = newTheme;
+        if (themeLink) themeLink.href = `/styles/themes/${newTheme}.css`;
+        localStorage.setItem("theme", newTheme);
+      }
+      document.getElementById("theme-toggle")?.addEventListener("click", switchTheme);
+    </script>
+  </body>
+</html>
