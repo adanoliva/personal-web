@@ -60,14 +60,14 @@ const isEmpty = !hasError && allGames.length === 0;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Adán Oliva — Indie & Retro</title>
-    <link rel="stylesheet" href={`${import.meta.env.BASE_URL}/styles/base.css`} />
-    <link rel="stylesheet" id="theme-style" href={`${import.meta.env.BASE_URL}/styles/themes/zx.css`} />
+    <link rel="stylesheet" href="/styles/base.css" />
+    <link rel="stylesheet" id="theme-style" href="/styles/themes/zx.css" />
     <script is:inline>
       const savedTheme = localStorage.getItem("theme") || "zx";
       document.documentElement.dataset.theme = savedTheme;
       const themeLink = document.getElementById("theme-style");
       if (themeLink) {
-        themeLink.href = `${import.meta.env.BASE_URL}/styles/themes/${savedTheme}.css`;
+        themeLink.href = `/styles/themes/${savedTheme}.css`;
       }
     </script>
   </head>
@@ -110,7 +110,7 @@ const isEmpty = !hasError && allGames.length === 0;
         const newTheme = currentTheme === "zx" ? "nes" : "zx";
         document.documentElement.dataset.theme = newTheme;
        if (themeLink) {
-        themeLink.href = `${import.meta.env.BASE_URL}/styles/themes/${newTheme}.css`;
+        themeLink.href = `/styles/themes/${newTheme}.css`;
       }
         localStorage.setItem("theme", newTheme);
       }
